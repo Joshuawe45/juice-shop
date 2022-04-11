@@ -1,17 +1,20 @@
-name: Sbom 
+name: dast 
 on: 
   push: 
     branches: [ master ] 
   pull_request: 
     branches: [ master ] 
 jobs: 
-  sbom : 
+  dast-scanning: 
     runs-on: ubuntu-latest 
-    name: Sbom 
+    name: dast scanning 
     steps: 
     - name: Checkout the code 
       uses: actions/checkout@v2
-    - name: Run syft 
+    - name: SCAN the application 
       run : | 
-              curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-              syft ghcr.io/joshuawe45/juice-app:latest 
+        docker run --rm -p 3000:3000 ghcr.io/joshuawe45/juice-app:latest
+    - name: ZAP Scan
+      uses: zaproxy/action-full-scan@v0.2.0
+      with:
+       target: 'http://localhost:3000/'
