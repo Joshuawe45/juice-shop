@@ -15,7 +15,7 @@ jobs:
       run : |
             cd $GITHUB_WORKSPACE 
             pip install njsscan 
-            njsscan -o output.json || true 
+            njsscan path $(pwd) -o output.json || true 
     - uses: actions/upload-artifact@v3
       if: always()
       with:
