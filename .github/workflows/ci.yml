@@ -1,16 +1,17 @@
-name: Run the application
+name: Sca 
 on: 
   push: 
     branches: [ master ] 
   pull_request: 
     branches: [ master ] 
 jobs: 
-  run-the-application: 
+  bundler: 
     runs-on: ubuntu-latest 
-    name: Run
+    name: sca
     steps: 
     - name: Checkout the code 
       uses: actions/checkout@v2
-    - name: Build the  application 
+    - name: Perform Npm   
       run : | 
-            docker run -d --rm -p 3000:3000 joshuawe45/certification:juice
+           npm i --package-lock-only
+           npm audit --json  --audit-level=high || true
