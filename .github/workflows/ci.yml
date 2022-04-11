@@ -1,31 +1,17 @@
-name: container-scanning 
+name: Sbom 
 on: 
   push: 
     branches: [ master ] 
   pull_request: 
     branches: [ master ] 
 jobs: 
-  container-scanning: 
+  sbom : 
     runs-on: ubuntu-latest 
-    name: container scanning 
+    name: Sbom 
     steps: 
     - name: Checkout the code 
       uses: actions/checkout@v2
-    - name: Run Trivy vulnerability scanner
+    - name: Run syft 
       run : | 
-              curl -sfL  https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh  | sh -s -- -b /usr/local/bin v0.21.3 
-              trivy image --severity MEDIUM,HIGH,CRITICAL  ghcr.io/joshuawe45/juice-app:latest >> /tmp/trivy || true 
-    - uses: actions/upload-artifact@v3
-      with:
-         name: my-artifact
-         path: /tmp/trivy 
-
-    - name: docker-scan 
-      run : | 
-              cd $GITHUB_WORKSPACE 
-              docker build -t test . 
-              docker scan --severity high test >> /tmp/scan || true 
-    - uses: actions/upload-artifact@v3
-      with:
-         name: my-artifact
-         path: /tmp/scan 
+              curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+              syft image  ghcr.io/joshuawe45/juice-app:latest 
