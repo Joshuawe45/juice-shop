@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v2
     - name: SCAN the application 
       run : | 
-              docker run --rm -p 3000:3000 joshuawe45/certification:juice
+              docker run -d --rm -p 3000:3000 joshuawe45/certification:juice
     - name: ZAP Scan
       uses: zaproxy/action-full-scan@v0.2.0
       with:
