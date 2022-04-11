@@ -1,21 +1,16 @@
-name: Docker build 
+name: Sbom 
 on: 
   push: 
     branches: [ master ] 
   pull_request: 
     branches: [ master ] 
 jobs: 
-  docker-build: 
+  container-scanning: 
     runs-on: ubuntu-latest 
-    name: Build 
+    name: sbom 
     steps: 
     - name: Checkout the code 
       uses: actions/checkout@v2
-    - name: 'Build:dockerimage'
-      uses: docker/build-push-action@v1
-      with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          repository: joshuawe45/juice-app
-          tags: latest
+    - name: Running sbom 
+      run : |  
+              docker sbom ghcr.io/joshuawe45/juice-app:latest  || true 
