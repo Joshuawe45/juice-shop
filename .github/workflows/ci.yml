@@ -12,11 +12,9 @@ jobs:
     - name: Checkout the code 
       uses: actions/checkout@v2
     - name: Run Trivy vulnerability scanner
-      run : |  
-              cd $GITHUB_WORKSPACE 
-              docker build -t test . 
+
               curl -sfL  https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh  | sh -s -- -b /usr/local/bin v0.21.3 
-              trivy image ghcr.io/joshuawe45/juice-app:latest >> /tmp/trivy || true 
+              trivy image --severity MEDIUM,HIGH,CRITICAL  ghcr.io/joshuawe45/juice-app:latest >> /tmp/trivy || true 
     - uses: actions/upload-artifact@v3
       with:
          name: my-artifact
@@ -24,7 +22,9 @@ jobs:
 
     - name: docker-scan 
       run : | 
-              docker scan --severity high ghcr.io/joshuawe45/juice-app:latest >> /tmp/scan || true 
+              cd $GITHUB_WORKSPACE 
+              docker build -t test . 
+              docker scan --severity high test >> /tmp/scan || true 
     - uses: actions/upload-artifact@v3
       with:
          name: my-artifact
