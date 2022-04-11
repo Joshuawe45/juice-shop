@@ -1,20 +1,16 @@
-name: dast 
+name: Run the application
 on: 
   push: 
     branches: [ master ] 
   pull_request: 
     branches: [ master ] 
 jobs: 
-  dast-scanning: 
+  run-the-application: 
     runs-on: ubuntu-latest 
-    name: dast scanning 
+    name: Run
     steps: 
     - name: Checkout the code 
       uses: actions/checkout@v2
-    - name: SCAN the application 
+    - name: Build the  application 
       run : | 
-              docker run -d --rm -p 3000:3000 joshuawe45/certification:juice
-    - name: ZAP Scan
-      uses: zaproxy/action-full-scan@v0.2.0
-      with:
-       target: 'http://localhost:3000/'
+            docker run -d --rm -p 3000:3000 joshuawe45/certification:juice
