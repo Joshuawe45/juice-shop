@@ -1,33 +1,15 @@
-name: Sast 
+name: Secret Scanning 
 on: 
   push: 
     branches: [ master ] 
   pull_request: 
     branches: [ master ] 
 jobs: 
-  brakeman: 
+  dast-scanning: 
     runs-on: ubuntu-latest 
-    name: sast-scan 
+    name: Secret Scanning 
     steps: 
     - name: Checkout the code 
       uses: actions/checkout@v2
-    - name: njsscan-scan  
-      run : |
-            cd $GITHUB_WORKSPACE 
-            pip install njsscan 
-            njsscan path $(pwd) -o output.json || true 
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-         name: my-artifact
-         path: output.json # or path/to/artifact
-    - name: semgrep-scan  
-      run : |
-            cd $GITHUB_WORKSPACE 
-            python3 -m pip install semgrep
-            semgrep --config "p/nodejsscan" --json -o semgrep.json
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-         name: my-artifact
-         path: semgrep.json # or path/to/artifact
+    - name: trufflehog-actions-scan
+      uses: edplato/trufflehog-actions-scan@master
