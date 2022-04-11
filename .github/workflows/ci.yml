@@ -12,7 +12,7 @@ jobs:
     - name: Checkout the code 
       uses: actions/checkout@v2
     - name: Run Trivy vulnerability scanner
-
+      run : | 
               curl -sfL  https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh  | sh -s -- -b /usr/local/bin v0.21.3 
               trivy image --severity MEDIUM,HIGH,CRITICAL  ghcr.io/joshuawe45/juice-app:latest >> /tmp/trivy || true 
     - uses: actions/upload-artifact@v3
